@@ -18,7 +18,12 @@ class FunctionUtils {
   static Future<String> uploadImage(String uid, File image) async{
     final FirebaseStorage storageInstance = FirebaseStorage.instance;
     final Reference ref = storageInstance.ref();
-    await ref.child(uid).putFile(image);
+    try{
+      await ref.child(uid).putFile(image);
+    }catch(e){
+      print('error: $e');
+    }
+    
     String downloadUrl = await storageInstance.ref(uid).getDownloadURL();
     print('image_path: $downloadUrl');
     return downloadUrl;

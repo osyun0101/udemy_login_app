@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_signin_button/button_view.dart';
+import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:udemy_login_app/utils/authentication.dart';
 import 'package:udemy_login_app/utils/firestore/users.dart';
 import 'package:udemy_login_app/view/screen.dart';
@@ -88,7 +90,21 @@ class _LoginPageState extends State<LoginPage> {
                     }
                   }
                 },
-                child: Text('emailでログイン'))
+                child: Text('emailでログイン')),
+              SignInButton(
+                Buttons.Google, 
+                onPressed: () async{
+                  var result = await Authentication.signInWithGoogle();
+                  if(result is UserCredential){
+                    var result = await UserFirestore.getUser(Authentication.currentFirebaseUser!.uid);
+                    if(result == true){
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Screen()));
+                    } else{
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => CreateAccountPage(isSignInWithGoogle: true,)));
+                    }
+                  }
+                }
+                )
           ]),
         ),
       ),

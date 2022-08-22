@@ -44,6 +44,9 @@ class UserFirestore {
     } on FirebaseException catch(e){
       print('ユーザー取得エラー');
       return false;
+    }catch(e){
+      print('$e');
+      return false;
     }
   }
 
